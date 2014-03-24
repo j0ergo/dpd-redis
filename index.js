@@ -3,6 +3,7 @@
  * Module dependencies
  */
 var Resource      = require('deployd/lib/resource'),
+    util          = require('util'),
     redis         = require('redis');
 
 /**
