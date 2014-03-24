@@ -40,11 +40,14 @@ Redis.prototype.handle = function ( ctx, next ) {
 
   // handle a specific request to the redis service
 
-  console.log("ctx.body: " + JSON.stringify(ctx.body));
+  console.log("Redis handle");
+
+  /*
 
   client.set(ctx.body.key, ctx.body.value, function(error, res) {
     ctx.done(error, res);
   });
+  */
 };
 
 /**
