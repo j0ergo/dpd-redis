@@ -20,6 +20,8 @@ function Redis( options ) {
 
 util.inherits( Redis, Resource );
 
+Redis.events = ["get", "post"];
+
 Redis.prototype.clientGeneration = true;
 
 Redis.basicDashboard = {
@@ -40,6 +42,7 @@ Redis.prototype.handle = function ( ctx, next ) {
   // handle a specific request to the redis service
 
   console.log("Redis handle");
+  next();
 
   /*
 
