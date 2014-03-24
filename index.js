@@ -4,7 +4,12 @@
  */
 var Resource      = require('deployd/lib/resource'),
     util          = require('util'),
-    redis         = require('redis');
+    redis         = require('redis'),
+    client        = redis.createClient();
+
+client.on("error", function (err) {
+  console.log("Error " + err);
+});
 
 /**
  * Module setup.
@@ -36,12 +41,12 @@ Redis.basicDashboard = {
 Redis.prototype.handle = function ( ctx, next ) {
 
   // handle a specific request to the redis service
-  
+
   console.log("ctx.body: " + JSON.stringify(ctx.body));
 
-  var error = null;
-  // callback:
-  ctx.done(error, "done");
+  client.set(ctx.body.key, ctx.body.value, function(error, res) {
+    ctx.done(error, res);
+  });
 };
 
 /**
