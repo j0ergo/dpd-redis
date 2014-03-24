@@ -38,18 +38,15 @@ Redis.basicDashboard = {
  * Module methodes
  */
 Redis.prototype.handle = function ( ctx, next ) {
+  if (!ctx.body || !ctx.body.key || !ctx.body.value) {
+      next();
+  } else {
+    console.log("Redis handle " + ctx.body.key + " => " + ctx.body.value);
 
-  // handle a specific request to the redis service
-
-  console.log("Redis handle");
-  next();
-
-  /*
-
-  client.set(ctx.body.key, ctx.body.value, function(error, res) {
-    ctx.done(error, res);
-  });
-  */
+    client.set(ctx.body.key, ctx.body.value, function(error, res) {
+      ctx.done(error, res);
+    });
+  }
 };
 
 /**
