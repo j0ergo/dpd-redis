@@ -13,7 +13,7 @@ var Resource      = require('deployd/lib/resource'),
 function Redis( options ) {
   Resource.apply(this, arguments);
 
-  console.log("redis client: " + JSON.stringify(client));
+  console.log("redis client: " + client);
   client.on("error", function (err) {
     console.log("Error " + err);
   });
