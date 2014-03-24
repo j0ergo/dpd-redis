@@ -7,18 +7,16 @@ var Resource      = require('deployd/lib/resource'),
     redis         = require('redis'),
     client        = redis.createClient();
 
-client.on("error", function (err) {
-  console.log("Error " + err);
-});
-
 /**
  * Module setup.
  */
 function Redis( options ) {
   Resource.apply(this, arguments);
 
-  // do the connectivity to the redis server
-
+  console.log("redis client: " + JSON.stringify(client));
+  client.on("error", function (err) {
+    console.log("Error " + err);
+  });
 }
 
 util.inherits( Redis, Resource );
