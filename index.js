@@ -7,10 +7,6 @@ var Resource      = require('deployd/lib/resource'),
     redis         = require('redis'),
     client        = redis.createClient();
 
-console.log("redis client: " + client);
-client.on("error", function (err) {
-  console.log("Error " + err);
-});
 /**
  * Module setup.
  */
@@ -20,32 +16,25 @@ function Redis( options ) {
 
 util.inherits( Redis, Resource );
 
-Redis.events = ["get", "post"];
-
 Redis.prototype.clientGeneration = true;
-
-Redis.basicDashboard = {
-  settings: [
-    {
-      name        : 'redisConfig',
-      type        : 'string',
-      description : 'location of the redis config file'
-    }
-  ]
-};
 
 /**
  * Module methodes
  */
 Redis.prototype.handle = function ( ctx, next ) {
-  if (!ctx.body || !ctx.body.key || !ctx.body.value) {
+  if (!ctx.body || !ctx.body.method || !ctx.body.key || !ctx.body.value) {
       next();
   } else {
-    console.log("Redis handle " + ctx.body.key + " => " + ctx.body.value);
-
-    client.set(ctx.body.key, ctx.body.value, function(error, res) {
-      ctx.done(error, res);
-    });
+    if (ctx.body.method == "set") {
+      client.set(ctx.body.key, ctx.body.value, function(error, res) {
+        if (error) console.log("error " + error);
+        ctx.done(error, res);
+      });
+    } else if (ctx.body.method == "publish") {
+      client.publish(ctx.body.key, ctx.body.value);
+    } else {
+      next();
+    }
   }
 };
 
