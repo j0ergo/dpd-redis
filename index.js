@@ -11,7 +11,10 @@ var Resource      = require('deployd/lib/resource'),
  */
 function Redis( options ) {
   Resource.apply(this, arguments);
-  this.client = redis.createClient(this.config.port, this.config.host, this.config.options);
+  var redisPort = (this.config && this.config.port) ? this.config.port : 6379;
+  var redisHost = (this.config && this.config.host) ? this.config.host : "127.0.0.1";
+  var redisOptions = (this.config && this.config.options) ? this.config.options : {};
+  this.client = redis.createClient(redisPort, redisHost, redisOptions);
 }
 
 util.inherits( Redis, Resource );
@@ -19,7 +22,7 @@ util.inherits( Redis, Resource );
 Redis.prototype.clientGeneration = true;
 
 /**
- * Module methodes
+ * Module methods
  */
 Redis.prototype.handle = function ( ctx, next ) {
   if (!ctx.body || !ctx.body.method || !ctx.body.key || !ctx.body.value) {
